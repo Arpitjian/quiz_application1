@@ -1,7 +1,13 @@
 package com.devrezaur.main.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.devrezaur.main.model.Question;
+import com.devrezaur.main.repository.QuestionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,54 +24,68 @@ public class MainController {
 
 	@Autowired
 	QuizService qService;
+	@Autowired
+	QuestionRepo qRepo;
 
-	Result result;
+
 	Boolean submitted;
-	
-	@ModelAttribute("result")
-	public Result getResult() {
-		return result;
-	}
+
 	
 	@GetMapping("/")
 	public String home() {
 		return "index.html";
 	}
-	
-	@PostMapping("/quiz")
-	public String quiz(@RequestParam String username, Model m, RedirectAttributes ra) {
-		if(username.equals("")) {
-			ra.addFlashAttribute("warning", "You must enter your name");
-			return "redirect:/";
+
+	@GetMapping("/adminLogin")
+	public String score() {
+
+		return "adminLogin.html";
+	}
+	@GetMapping("/createTestPage")
+	public String createTest() {
+
+		return "createTestPage.html";
+	}
+
+	@PostMapping("/saveQuestions")
+	public String saveQuestions(
+			@RequestParam(value = "question[]", required = false) List<String> questions,
+			@RequestParam(value = "opt1[]", required = false) List<String> opt1,
+			@RequestParam(value = "opt2[]", required = false) List<String> opt2,
+			@RequestParam(value = "opt3[]", required = false) List<String> opt3,
+			@RequestParam(value = "correctAns[]", required = false) List<String> correctAns,
+			Model model) {
+
+		if (questions == null || opt1 == null || opt2 == null || opt3 == null || correctAns == null) {
+			System.out.println("Missing parameters!");
+			return "error"; // return error view or something else
 		}
-		
-		submitted = false;
-		result = new Result();
-		result.setUsername(username);
-		
-		QuestionForm qForm = qService.getQuestions();
-		m.addAttribute("qForm", qForm);
-		
-		return "quiz.html";
-	}
-	
-	@PostMapping("/submit")
-	public String submit(@ModelAttribute QuestionForm qForm, Model m) {
-		if(!submitted) {
-			result.setTotalCorrect(qService.getResult(qForm));
-			qService.saveScore(result);
-			submitted = true;
+
+		List<Question> questionList = new ArrayList<>();
+
+		for (int i = 0; i < questions.size(); i++) {
+			Question question = new Question();
+			question.setDescription(questions.get(i));
+			question.setOptionA(opt1.get(i));
+			question.setOptionB(opt2.get(i));
+			question.setOptionC(opt3.get(i));
+			question.setCorrectAnswer(correctAns.get(i));
+
+			questionList.add(question);
 		}
-		
-		return "result.html";
+
+		// Check if repository is injected
+		System.out.println("Saving questions to the database...");
+
+		for (Question question : questionList) {
+			qRepo.save(question);
+		}
+
+		model.addAttribute("message", "Questions saved successfully!");
+		return "questionsSaved.html";
 	}
-	
-	@GetMapping("/score")
-	public String score(Model m) {
-		List<Result> sList = qService.getTopScore();
-		m.addAttribute("sList", sList);
-		
-		return "scoreboard.html";
-	}
+
+
+
 
 }

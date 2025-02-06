@@ -1,10 +1,7 @@
 package com.devrezaur.main.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,27 +11,32 @@ public class Question {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int quesId;
-	private String title;
+	@Column(name = "ques_id")
+	private Integer quesId;
+	private String description;
 	private String optionA;
 	private String optionB;
 	private String optionC;
-	private int ans;
-	private int chose;
+	//private String optionD;
+	private String ans;
+	private String chose;
+	//private int negativeMarking;
 
 	public Question() {
 		super();
 	}
 
-	public Question(int quesId, String title, String optionA, String optionB, String optionC, int ans, int chose) {
+	public Question(int quesId, String description, String optionA, String optionB, String optionC ,String ans,String chose) {
 		super();
 		this.quesId = quesId;
-		this.title = title;
+		this.description = description;
 		this.optionA = optionA;
 		this.optionB = optionB;
 		this.optionC = optionC;
+		//this.optionD = optionD;
 		this.ans = ans;
 		this.chose = chose;
+		//this.negativeMarking = negativeMarking;
 	}
 
 	public int getQuesId() {
@@ -45,12 +47,12 @@ public class Question {
 		this.quesId = quesId;
 	}
 
-	public String getTitle() {
-		return title;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setDescription(String title) {
+		this.description = description;
 	}
 
 	public String getOptionA() {
@@ -76,26 +78,32 @@ public class Question {
 	public void setOptionC(String optionC) {
 		this.optionC = optionC;
 	}
-
-	public int getAns() {
+//	public String getOptionD() {
+//		return optionD;
+//	}
+//
+//	public void D(String optionD) {
+//		this.optionD = optionD;
+//	}
+	public String getCorrectAnswer() {
 		return ans;
 	}
 
-	public void setAns(int ans) {
+	public void setCorrectAnswer(String ans) {
 		this.ans = ans;
 	}
 
-	public int getChose() {
+	public String getChose() {
 		return chose;
 	}
 
-	public void setChose(int choosed) {
+	public void setChose(String choosed) {
 		this.chose = choosed;
 	}
 
 	@Override
 	public String toString() {
-		return "Question [quesId=" + quesId + ", title=" + title + ", optionA=" + optionA + ", optionB=" + optionB + ", optionC=" + optionC + ", ans=" + ans + ", chose=" + chose + "]";
+		return "Question [quesId=" + quesId + ", description=" + description + ", optionA=" + optionA + ", optionB=" + optionB + ", optionC=" + optionC + ", ans=" + ans + ", chose=" + chose + "]";
 	}
 
 }
