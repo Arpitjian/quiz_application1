@@ -1,109 +1,85 @@
 package com.devrezaur.main.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-import org.springframework.stereotype.Component;
-
-@Component
 @Entity
-@Table(name = "questions")
+@Table(name = "questionstable")
 public class Question {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ques_id")
-	private Integer quesId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer ques_id;
+
+	@NotNull(message = "Description cannot be null")
 	private String description;
-	private String optionA;
-	private String optionB;
-	private String optionC;
-	//private String optionD;
-	private String ans;
-	private String chose;
-	//private int negativeMarking;
 
-	public Question() {
-		super();
+	private String option_a;
+	private String option_b;
+	private String option_c;
+	private String correct_ans;
+	private String chosen;
+
+	// Getters and Setters
+	public Integer getQuesId() {
+		return ques_id;
 	}
 
-	public Question(int quesId, String description, String optionA, String optionB, String optionC ,String ans,String chose) {
-		super();
-		this.quesId = quesId;
-		this.description = description;
-		this.optionA = optionA;
-		this.optionB = optionB;
-		this.optionC = optionC;
-		//this.optionD = optionD;
-		this.ans = ans;
-		this.chose = chose;
-		//this.negativeMarking = negativeMarking;
-	}
-
-	public int getQuesId() {
-		return quesId;
-	}
-
-	public void setQuesId(int quesId) {
-		this.quesId = quesId;
+	public void setQuesId(Integer ques_id) {
+		this.ques_id = ques_id;
 	}
 
 	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(String title) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
 	public String getOptionA() {
-		return optionA;
+		return option_a;
 	}
 
 	public void setOptionA(String optionA) {
-		this.optionA = optionA;
+		this.option_a = optionA;
 	}
 
 	public String getOptionB() {
-		return optionB;
+		return option_b;
 	}
 
 	public void setOptionB(String optionB) {
-		this.optionB = optionB;
+		this.option_b = optionB;
 	}
 
 	public String getOptionC() {
-		return optionC;
+		return option_c;
 	}
 
 	public void setOptionC(String optionC) {
-		this.optionC = optionC;
-	}
-//	public String getOptionD() {
-//		return optionD;
-//	}
-//
-//	public void D(String optionD) {
-//		this.optionD = optionD;
-//	}
-	public String getCorrectAnswer() {
-		return ans;
+		this.option_c = optionC;
 	}
 
-	public void setCorrectAnswer(String ans) {
-		this.ans = ans;
+	public String getCorrectAnswer() {
+		return correct_ans;
+	}
+
+	public void setCorrectAnswer(String correct_ans) {
+		this.correct_ans = correct_ans;
 	}
 
 	public String getChose() {
-		return chose;
+		return chosen;
 	}
 
-	public void setChose(String choosed) {
-		this.chose = choosed;
+	public void setChose(String chosen) {
+		this.chosen = chosen;
 	}
 
 	@Override
 	public String toString() {
-		return "Question [quesId=" + quesId + ", description=" + description + ", optionA=" + optionA + ", optionB=" + optionB + ", optionC=" + optionC + ", ans=" + ans + ", chose=" + chose + "]";
+		return "Question [ques_id=" + ques_id + ", description=" + description + ", option_a=" + option_a + ", option_b=" + option_b
+				+ ", option_c=" + option_c + ", correct_ans=" + correct_ans + ", chosen=" + chosen + "]";
 	}
-
 }

@@ -1,66 +1,44 @@
 package com.devrezaur.main.service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import com.devrezaur.main.model.Question;
 import com.devrezaur.main.model.QuestionForm;
-import com.devrezaur.main.model.Result;
 import com.devrezaur.main.repository.QuestionRepo;
-import com.devrezaur.main.repository.ResultRepo;
 
 @Service
 public class QuizService {
 
-
-
-	QuestionForm qForm;
+	// Inject the required repository
 	@Autowired
 	QuestionRepo qRepo;
 
-	Result result;
-	@Autowired
-	ResultRepo rRepo;
-	Question question;
+	// Variable to store the QuestionForm
+	private QuestionForm qForm;
+
+	// Method to get a random selection of questions
 	public QuestionForm getQuestions() {
-		List<Question> allQues = qRepo.findAll();
-		List<Question> qList = new ArrayList<Question>();
+		List<Question> allQues = qRepo.findAll();  // Get all questions from the database
+		List<Question> qList = new ArrayList<Question>();  // List to hold randomly selected questions
 
-		Random random = new Random();
+		Random random = new Random();  // Random number generator
 
-		for(int i=0; i<5; i++) {
-			int rand = random.nextInt(allQues.size());
-			qList.add(allQues.get(rand));
-			allQues.remove(rand);
+		// Loop to select 5 random questions
+		for (int i = 0; i < 5; i++) {
+			int rand = random.nextInt(allQues.size());  // Get a random index
+			qList.add(allQues.get(rand));  // Add the question at the random index
+			allQues.remove(rand);  // Remove the selected question from the list
 		}
 
+		// Initialize the QuestionForm and set the random questions
+		qForm = new QuestionForm();
 		qForm.setQuestions(qList);
 
-		return qForm;
-	}
-
-	public int getResult(QuestionForm qForm) {
-		int correct = 0;
-
-		for(Question q: qForm.getQuestions())
-			if(q.getCorrectAnswer() == q.getChose())
-				correct++;
-
-		return correct;
-	}
-
-	public void saveScore(Result result) {
-		Result saveResult = new Result();
-		saveResult.setUsername(result.getUsername());
-		saveResult.setTotalCorrect(result.getTotalCorrect());
-		rRepo.save(saveResult);
-	}
-
-	public List<Result> getTopScore() {
-		List<Result> sList = rRepo.findAll(Sort.by(Sort.Direction.DESC, "totalCorrect"));
-
-		return sList;
+		return qForm;  // Return the QuestionForm with the selected questions
 	}
 }

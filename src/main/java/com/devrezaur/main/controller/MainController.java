@@ -56,16 +56,26 @@ public class MainController {
 			@RequestParam(value = "correctAns[]", required = false) List<String> correctAns,
 			Model model) {
 
+		// Check for missing parameters
 		if (questions == null || opt1 == null || opt2 == null || opt3 == null || correctAns == null) {
 			System.out.println("Missing parameters!");
-			return "error"; // return error view or something else
+			return "error"; // Return error view or something else
 		}
 
 		List<Question> questionList = new ArrayList<>();
 
 		for (int i = 0; i < questions.size(); i++) {
+			String description = questions.get(i);
+
+			// Ensure description is not null or empty
+			if (description == null || description.trim().isEmpty()) {
+				System.out.println("Error: Description for question " + (i + 1) + " is null or empty");
+				model.addAttribute("message", "Description for question " + (i + 1) + " cannot be null or empty.");
+				return "error"; // Return an error page
+			}
+
 			Question question = new Question();
-			question.setDescription(questions.get(i));
+			question.setDescription(description);
 			question.setOptionA(opt1.get(i));
 			question.setOptionB(opt2.get(i));
 			question.setOptionC(opt3.get(i));
@@ -74,16 +84,16 @@ public class MainController {
 			questionList.add(question);
 		}
 
-		// Check if repository is injected
-		System.out.println("Saving questions to the database...");
-
+		// Save questions to the database
 		for (Question question : questionList) {
 			qRepo.save(question);
 		}
 
+		// Add success message
 		model.addAttribute("message", "Questions saved successfully!");
 		return "questionsSaved.html";
 	}
+
 
 
 
