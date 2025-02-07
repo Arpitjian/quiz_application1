@@ -9,24 +9,45 @@ public class Question {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer ques_id;
+	private Integer quesId;
+
+	@ManyToOne
+	@JoinColumn(name = "test_id", referencedColumnName = "testId", nullable = false)
+	private Test test;
 
 	@NotNull(message = "Description cannot be null")
+	@Column(nullable = false)
 	private String description;
 
-	private String option_a;
-	private String option_b;
-	private String option_c;
-	private String correct_ans;
+	@Column(nullable = false)
+	private String optionA;
+
+	@Column(nullable = false)
+	private String optionB;
+
+	@Column(nullable = false)
+	private String optionC;
+
+	@Column(nullable = false)
+	private String correctAns;
+
 	private String chosen;
 
 	// Getters and Setters
 	public Integer getQuesId() {
-		return ques_id;
+		return quesId;
 	}
 
-	public void setQuesId(Integer ques_id) {
-		this.ques_id = ques_id;
+	public void setQuesId(Integer quesId) {
+		this.quesId = quesId;
+	}
+
+	public Test getTest() {
+		return test;
+	}
+
+	public void setTest(Test test) {
+		this.test = test;
 	}
 
 	public String getDescription() {
@@ -38,48 +59,42 @@ public class Question {
 	}
 
 	public String getOptionA() {
-		return option_a;
+		return optionA;
 	}
 
 	public void setOptionA(String optionA) {
-		this.option_a = optionA;
+		this.optionA = optionA;
 	}
 
 	public String getOptionB() {
-		return option_b;
+		return optionB;
 	}
 
 	public void setOptionB(String optionB) {
-		this.option_b = optionB;
+		this.optionB = optionB;
 	}
 
 	public String getOptionC() {
-		return option_c;
+		return optionC;
 	}
 
 	public void setOptionC(String optionC) {
-		this.option_c = optionC;
+		this.optionC = optionC;
 	}
 
-	public String getCorrectAnswer() {
-		return correct_ans;
+	public String getCorrectAns() {
+		return correctAns;
 	}
 
-	public void setCorrectAnswer(String correct_ans) {
-		this.correct_ans = correct_ans;
+	public void setCorrectAns(String correctAns) {
+		this.correctAns = correctAns;
 	}
 
-	public String getChose() {
+	public String getChosen() {
 		return chosen;
 	}
 
-	public void setChose(String chosen) {
+	public void setChosen(String chosen) {
 		this.chosen = chosen;
-	}
-
-	@Override
-	public String toString() {
-		return "Question [ques_id=" + ques_id + ", description=" + description + ", option_a=" + option_a + ", option_b=" + option_b
-				+ ", option_c=" + option_c + ", correct_ans=" + correct_ans + ", chosen=" + chosen + "]";
 	}
 }

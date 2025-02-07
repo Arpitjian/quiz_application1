@@ -6,27 +6,23 @@ import java.util.Map;
 
 import com.devrezaur.main.model.Question;
 import com.devrezaur.main.repository.QuestionRepo;
+import com.devrezaur.main.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.devrezaur.main.model.QuestionForm;
+//import com.devrezaur.main.model.QuestionForm;
 import com.devrezaur.main.model.Result;
-import com.devrezaur.main.service.QuizService;
+//import com.devrezaur.main.service.QuizService;
 
 @Controller
 public class MainController {
 
-	@Autowired
-	QuizService qService;
+
 	@Autowired
 	QuestionRepo qRepo;
-
 
 	Boolean submitted;
 
@@ -41,11 +37,22 @@ public class MainController {
 
 		return "adminLogin.html";
 	}
+
+
 	@GetMapping("/createTestPage")
 	public String createTest() {
 
 		return "createTestPage.html";
 	}
+
+	@RequestMapping("/inviteExaminee")
+
+
+		@PostMapping
+		public String inviteExaminees() {
+			// Process the invitation logic here
+			return "inviteExaminee.html"; // Return the name of your Thymeleaf HTML page (e.g., inviteSuccess.html)
+		}
 
 	@PostMapping("/saveQuestions")
 	public String saveQuestions(
@@ -79,20 +86,24 @@ public class MainController {
 			question.setOptionA(opt1.get(i));
 			question.setOptionB(opt2.get(i));
 			question.setOptionC(opt3.get(i));
-			question.setCorrectAnswer(correctAns.get(i));
+			question.setCorrectAns(correctAns.get(i));
 
+			// Add question to the list
 			questionList.add(question);
 		}
 
-		// Save questions to the database
+		// Save all the questions to the database
 		for (Question question : questionList) {
 			qRepo.save(question);
 		}
 
-		// Add success message
+		// Add success message to the model
 		model.addAttribute("message", "Questions saved successfully!");
+
+		// Redirect to a success page (adjust the return value as needed)
 		return "questionsSaved.html";
 	}
+
 
 
 
